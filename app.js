@@ -1,27 +1,21 @@
 const express = require("express");
-
-const authRouter = require('./routers/auth')
-
 const app = express();
 require("dotenv").config();
-
 const cors = require("cors")
+const {PORT, HOST} = process.env;
+const port = PORT || 3000;
 
-const port = process.env.PORT;
+const authRouter = require("./routers/auth.js");
+const errorHandler = require("./middlewares/errorHandler.js");
 
 app.use(cors());
-
+app.use(express.static("public"));
 app.use(express.json());
-
-app.get("/", (req, res) => {
-    res.send(`
-        <h1>Hello World!</h1>
-        <a href="/auth/login">Login</a>
-    `);
-})
 
 app.use('/auth', authRouter)
 
+app.use(errorHandler);
+
 app.listen(port, () => {
-    console.log(`Server attivo su http://localhost:${port}`);
+    console.log(`Server attivo su http://${HOST}:${port}`);
 });

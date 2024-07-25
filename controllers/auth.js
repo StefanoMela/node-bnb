@@ -1,49 +1,62 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const generateToken = require('../utils/generateToken'); // recupero funzione per generare token
-const { hashPassword, comparePassword } = require("../utils/password.js"); // recupero funzioni hashing e controllo
+const { generateToken, hashPassword, comparePassword } = require("../utils/auth.js"); // recupero funzioni token hashing e controllo
 const deleteProfilePic = require("../utils/deleteProfilePic.js");
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
 require('dotenv').config();
+const {PORT, HOST} = process.env;
+const port = PORT || 3000;
 
 const register = async (req, res) => {
     try {
-        // destrutturo i campi che mi arriveranno
-        const { name, lastName, dateOfBirth, username, email, password, avatar} = req.body;
-        console.log(avatar);
-        // creo l'oggetto User e hasho la password
+        // Destruttura i campi che mi arriveranno
+        const { name, lastName, dateOfBirth, username, email, password } = req.body;
+        // Controllo che i campi siano tutti presenti
+        if (!name || !lastName || !dateOfBirth || !username || !email || !password) {
+            throw new restError('Missing fields', 400);
+        }
+
+        // Hash della password
+        const hashedPassword = await hashPassword(password);
+
+        // Crea l'oggetto User
         const data = {
             name,
             lastName,
             dateOfBirth,
             username,
             email,
-            password: await hashPassword(password),
-            avatar,
-        }
-        // controllo se c'è un file allegato e creo il path di salvataggio
+            password: hashedPassword,
+        };
+
+        // Aggiungi il percorso dell'immagine se presente
         if (req.file) {
-            data.img_path = `${HOST}:${port}/profile_pics/${req.file.filename}`;
+            console.log('File received:', req.file);
+            req.file.destination = `${HOST}:${port}/avatars/${data.username}/${req.file.filename}`;
+        } else {
+            throw new restError('Missing profile picture', 400);
         }
 
-        // istanzio User e lo riempio con i data precedenti
+        // Crea l'utente nel database
         const user = await prisma.user.create({ data });
 
-        // creo il token univoco
+        // Crea il token univoco
         const token = generateToken({
             email: user.email,
             username: user.username,
             id: user.id
         }, "1h");
 
-        // Rimuovo campi sensibili prima di rispondere
-        const { password: _, ...userData } = user;
+        // Rimuovi campi sensibili
+        delete user.id;
+        delete user.password;
 
-        // restituisco json del token e dello user
-        res.json({ token, data: user });
+        // Rispondi con il token e i dati dell'utente
+        res.json({ token, user });
 
     } catch (err) {
+        console.error('Error occurred:', err);
         if (req.file) {
             deleteProfilePic(req.file.filename);
         }

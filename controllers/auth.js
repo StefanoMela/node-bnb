@@ -59,7 +59,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        
         // recupero user via email
         const user = await prisma.user.findUnique({
             where: { email },

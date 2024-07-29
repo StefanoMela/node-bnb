@@ -4,7 +4,6 @@ const { generateToken, hashPassword, comparePassword } = require("../utils/auth.
 const deleteProfilePic = require("../utils/deleteProfilePic.js");
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
-require('dotenv').config();
 
 const register = async (req, res) => {
     try {

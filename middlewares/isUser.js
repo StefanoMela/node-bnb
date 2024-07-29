@@ -1,29 +1,6 @@
 const RestError = require("../utils/restError");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
-const authProcedure = (req, res, next) => {
-
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
-
-    // const token = authorization && authorization.split(" ")[1];
-
-    if (!token) {
-        throw new RestError("Token non funziona", 403);
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
-        if (err) {
-            throw new RestError("Token non valido", 403);
-        }
-        req.body.user = data;
-        next();
-    });
-}
 const isUserPost = async (req, res, next) => {
     try {
         const userId = req.user.id;
@@ -57,7 +34,6 @@ const isAdmin = (req, res, next) => {
 }
 
 module.exports = {
-    authProcedure,
     isUserPost,
     isAdmin
 }

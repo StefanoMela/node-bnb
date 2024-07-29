@@ -9,7 +9,7 @@ router.use(authProcedure)
 
 router.get('/', houseController.index)
 
-router.post('/', uploader.array("images"), houseController.store)
+router.post('/', uploader.single("image"), houseController.store)
 
 router.get('/:id', houseController.show)
 

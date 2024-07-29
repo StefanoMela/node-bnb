@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
+const deleteProfilePic = require("../utils/deleteProfilePic.js");
 
 
 const index = async (req, res) => {
@@ -29,12 +30,32 @@ const show = async (req, res) => {
 
 const store = async (req, res) => { 
     try {
-        // const house = await prisma.house.create({
-        //     data: req.body
-        // });
-        console.log(req.body);
-        res.json('sei in store della casa ' + req.body.title);
+
+        const { title, description, pricePerDay, rooms, beds, baths, squareMeters, address } = req.body;
+
+        const data = {
+            title,
+            description,
+            pricePerDay,
+            rooms,
+            beds,
+            baths,
+            squareMeters,
+            address
+        };
+
+        if(req.file) {
+            data.image = req.file.filename;
+        }
+
+        const house = await prisma.house.create({ data });
+        res.json(house);
+
     } catch (err) {
+        console.error('Error occurred:', err);
+        if (req.file) {
+            deleteProfilePic(req.file.filename);
+        }
         errorHandler(err, req, res);
     }
 }

@@ -29,7 +29,7 @@ const registerData = {
             bail: true
         }
     },
-    username:{
+    username: {
         in: ["body"],
         notEmpty: {
             errorMessage: 'Username is required.',
@@ -93,15 +93,6 @@ const registerData = {
             options: { min: 8 }
         }
     },
-    // avatar: {
-    //     in: ["body"],
-    //     optional: true,
-    //     isMimeType: {
-    //         options: ["image/png", "image/jpg", "image/jpeg"],
-    //         errorMessage: 'Avatar must be a png, jpg or jpeg',
-    //         bail: true
-    //     }
-    // }
 }
 
 const loginData = {

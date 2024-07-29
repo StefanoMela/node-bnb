@@ -5,17 +5,11 @@ const deleteProfilePic = require("../utils/deleteProfilePic.js");
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
 require('dotenv').config();
-const {PORT, HOST} = process.env;
-const port = PORT || 3000;
 
 const register = async (req, res) => {
     try {
         // Destruttura i campi che mi arriveranno
         const { name, lastName, dateOfBirth, username, email, password } = req.body;
-        // Controllo che i campi siano tutti presenti
-        if (!name || !lastName || !dateOfBirth || !username || !email || !password) {
-            throw new restError('Missing fields', 400);
-        }
 
         // Hash della password
         const hashedPassword = await hashPassword(password);
@@ -33,9 +27,7 @@ const register = async (req, res) => {
         // Aggiungi il percorso dell'immagine se presente
         if (req.file) {
             console.log('File received:', req.file);
-            req.file.destination = `${HOST}:${port}/avatars/${data.username}/${req.file.filename}`;
-        } else {
-            throw new restError('Missing profile picture', 400);
+            data.avatar = req.file.filename;
         }
 
         // Crea l'utente nel database
@@ -48,12 +40,12 @@ const register = async (req, res) => {
             id: user.id
         }, "1h");
 
-        // Rimuovi campi sensibili
-        delete user.id;
-        delete user.password;
+        // Rimuovi campi sensibili dalla risposta
+        const userData = { ...user };
+        delete userData.password;
 
         // Rispondi con il token e i dati dell'utente
-        res.json({ token, user });
+        res.json({ token, user: userData });
 
     } catch (err) {
         console.error('Error occurred:', err);

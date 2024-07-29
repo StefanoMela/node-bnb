@@ -4,8 +4,7 @@ const path = require('path');
 // Configura multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../public/avatars'); // Usa path relativo corretto
-        console.log('Upload path:', uploadPath);
+        const uploadPath = path.join(__dirname, `../public/avatars/`);
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {

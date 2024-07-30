@@ -56,7 +56,6 @@ const store = async (req, res) => {
     } catch (err) {
         console.error('Error occurred:', err);
         if (req.file) {
-            console.log('elimino foto', req.file.filename);
             deletePhoto('house_images', req.file.filename);
         }
         errorHandler(err, req, res);

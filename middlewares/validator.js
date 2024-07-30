@@ -1,5 +1,5 @@
 const { checkSchema, validationResult } = require("express-validator");
-const deleteProfilePic = require("../utils/deleteProfilePic");
+const deletePhoto = require("../utils/deletePhoto");
 
 module.exports = (schema) => {
     return [
@@ -8,7 +8,8 @@ module.exports = (schema) => {
             const errors = validationResult(req);
             if(!errors.isEmpty()){
                 if(req.file){
-                    deleteProfilePic(req.file.filename);
+                    const picFolder = req.originalUrl.includes('auth') ? 'avatars' : 'house_images';
+                    deletePhoto(picFolder, req.file.filename);
                 }
                 return res.status(400).json({errors: errors.array()})
             }

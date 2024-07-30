@@ -1,9 +1,6 @@
-const RestError = require("../utils/restError");
 module.exports = (err, req, res, next) => {
-    if(err instanceof RestError) {
-        return res.status(err.statusCode).send(`Error ${err.statusCode} - ${err.message}`);
-    }
+    console.error(err);
     const statusCode = err.statusCode || 500;
-    const message = `Error ${statusCode}, message: server error`;
+    const message = err.customMessage || 'Server Error';
     res.status(statusCode).send(message);
 }

@@ -2,13 +2,15 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
-const deleteProfilePic = require("../utils/deleteProfilePic.js");
+const deletePhoto = require('../utils/deletePhoto.js');
+const { userId } = require('../validations/houses.js');
 
 
 const index = async (req, res) => {
     try {
         // const houses = await prisma.house.findMany();
-        console.log(req);
+        // res.json(houses);
+
         res.json('sei in index delle case');
     } catch (err) {
         errorHandler(err, req, res);
@@ -27,10 +29,8 @@ const show = async (req, res) => {
     }
 }
 
-
-const store = async (req, res) => { 
+const store = async (req, res) => {
     try {
-
         const { title, description, pricePerDay, rooms, beds, baths, squareMeters, address } = req.body;
 
         const data = {
@@ -41,11 +41,13 @@ const store = async (req, res) => {
             beds,
             baths,
             squareMeters,
-            address
+            address,
+            userId: req.user.id
         };
 
-        if(req.file) {
-            data.image = req.file.filename;
+        if (req.file) {
+            console.log('File received:', req.file);
+            data.images = req.file.filename;
         }
 
         const house = await prisma.house.create({ data });
@@ -54,7 +56,8 @@ const store = async (req, res) => {
     } catch (err) {
         console.error('Error occurred:', err);
         if (req.file) {
-            deleteProfilePic(req.file.filename);
+            console.log('elimino foto', req.file.filename);
+            deletePhoto('house_images', req.file.filename);
         }
         errorHandler(err, req, res);
     }
@@ -87,7 +90,7 @@ const destroy = async (req, res) => {
     }
 }
 
-module.exports = { 
+module.exports = {
     index,
     show,
     store,

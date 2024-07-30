@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { generateToken, hashPassword, comparePassword } = require("../utils/auth.js"); // recupero funzioni token hashing e controllo
-const deleteProfilePic = require("../utils/deleteProfilePic.js");
+const deletePhoto = require("../utils/deletePhoto.js");
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
 
@@ -49,7 +49,7 @@ const register = async (req, res) => {
     } catch (err) {
         console.error('Error occurred:', err);
         if (req.file) {
-            deleteProfilePic(req.file.filename);
+            deletePhoto('avatars', req.file.filename);
         }
         errorHandler(err, req, res);
     }
@@ -58,7 +58,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
+
         // recupero user via email
         const user = await prisma.user.findUnique({
             where: { email },

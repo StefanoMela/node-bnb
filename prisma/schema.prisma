@@ -22,7 +22,7 @@ model User {
   email        String        @unique
   password     String
   avatar       String?
-  houses   House[]
+  houses       House[]
   messages     Message[]
   sponsorships Sponsorship[]
   created_at   DateTime      @default(now())
@@ -33,53 +33,62 @@ model House {
   id           Int           @id @default(autoincrement())
   title        String
   description  String
-  image        String
+  images       Image[]
   pricePerDay  Int
   rooms        Int
   beds         Int
   baths        Int
   squareMeters Int
   address      String
-  latitude     Float
-  longitude    Float
+  latitude     Float?
+  longitude    Float?
   amenities    Amenity[]
   visible      Boolean       @default(true)
   user         User          @relation(fields: [userId], references: [id])
-  userId      Int
+  userId       Int
   created_at   DateTime      @default(now())
   updated_at   DateTime      @default(now())
   messages     Message[]
   sponsorships Sponsorship[]
 }
 
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  house      House    @relation(fields: [houseId], references: [id])
+  houseId    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
 model Message {
-  id           Int       @id @default(autoincrement())
-  content      String
-  user         User      @relation(fields: [userId], references: [id])
-  userId      Int
-  house    House @relation(fields: [houseId], references: [id])
-  houseId Int
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @default(now())
+  id         Int      @id @default(autoincrement())
+  content    String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  house      House    @relation(fields: [houseId], references: [id])
+  houseId    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
 
 model Amenity {
-  id           Int       @id @default(autoincrement())
-  name         String
-  house    House @relation(fields: [houseId], references: [id])
-  houseId Int
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @default(now())
+  id         Int      @id @default(autoincrement())
+  name       String
+  house      House    @relation(fields: [houseId], references: [id])
+  houseId    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
 
 model Sponsorship {
-  id           Int       @id @default(autoincrement())
-  startDate    DateTime
-  endDate      DateTime
-  house    House @relation(fields: [houseId], references: [id])
-  houseId Int
-  user         User      @relation(fields: [userId], references: [id])
-  userId      Int
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @default(now())
+  id         Int      @id @default(autoincrement())
+  startDate  DateTime
+  endDate    DateTime
+  house      House    @relation(fields: [houseId], references: [id])
+  houseId    Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }

@@ -93,6 +93,27 @@ const registerData = {
             options: { min: 8 }
         }
     },
+    avatar: {
+        in: ["avatar"],
+        optional: true,
+        custom: {
+            options: (value, { req }) => {
+                const allowedMimetypes = ['image/jpeg', 'image/png', 'image/jpg']; // Adjust as needed
+                if (req.file) { // Check if a file was uploaded
+                    const file = req.avatar;
+                    if (!allowedMimetypes.includes(file.mimetype)) {
+                        throw new Error('Invalid avatar file format. Allowed formats: jpeg, png, gif');
+                    }
+                    // Additional checks like file size, dimensions, etc. can be added here
+                    return true;
+                } else {
+                    // Handle the case where no file was uploaded
+                    return true; // Or throw an error if required
+                }
+            },
+        },
+    },
+
 }
 
 const loginData = {

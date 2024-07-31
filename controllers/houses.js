@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 const errorHandler = require("../middlewares/errorHandler.js");
 const restError = require("../utils/restError.js");
 const deletePhoto = require('../utils/deletePhoto.js');
-const { userId } = require('../validations/houses.js');
 
 
 const index = async (req, res) => {
@@ -31,6 +30,10 @@ const show = async (req, res) => {
 
 const store = async (req, res) => {
     try {
+
+        console.log(req.body);
+        console.log(req.files);
+
         const { title, description, pricePerDay, rooms, beds, baths, squareMeters, address } = req.body;
 
         const data = {
@@ -45,9 +48,9 @@ const store = async (req, res) => {
             userId: req.user.id
         };
 
-        if (req.file) {
-            console.log('File received:', req.file);
-            data.images = req.file.filename;
+        if (req.files) {
+            console.log('File received:', req.files);
+            data.images = req.files.filename;
         }
 
         const house = await prisma.house.create({ data });
@@ -55,8 +58,8 @@ const store = async (req, res) => {
 
     } catch (err) {
         console.error('Error occurred:', err);
-        if (req.file) {
-            deletePhoto('house_images', req.file.filename);
+        if (req.files) {
+            deletePhoto(`house_images/${req.user.id}/house_${req.body.houseId}`, req.files.filename);
         }
         errorHandler(err, req, res);
     }

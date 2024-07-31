@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
         } else {
             // Crea la directory per l'utente e la casa se non esiste
             const userDir = path.join(__dirname, `../public/house_images/${req.user.id}`);
-            const houseDir = path.join(userDir, `house_${req.body.houseId}`);
+            const houseDir = path.join(userDir, `house_${req.body.title}`);
             if (!fs.existsSync(houseDir)) {
                 fs.mkdirSync(houseDir, { recursive: true });
             }

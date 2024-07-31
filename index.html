@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Multiple Images</title>
+</head>
+<body>
+    <h1>Upload House and Images</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="pricePerDay">Price Per Day:</label>
+        <input type="number" id="pricePerDay" name="pricePerDay" required><br><br>
+
+        <label for="rooms">Rooms:</label>
+        <input type="number" id="rooms" name="rooms" required><br><br>
+
+        <label for="beds">Beds:</label>
+        <input type="number" id="beds" name="beds" required><br><br>
+
+        <label for="baths">Baths:</label>
+        <input type="number" id="baths" name="baths" required><br><br>
+
+        <label for="squareMeters">Square Meters:</label>
+        <input type="number" id="squareMeters" name="squareMeters" required><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required><br><br>
+
+        <label for="images">Images:</label>
+        <input type="file" id="images" name="images" multiple><br><br>
+
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="status"></div>
+
+</body>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            console.log(formData);
+
+            try {
+                const response = await fetch('http://localhost:3000/houses', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb3ZhM0BlbWFpbC5jb20iLCJ1c2VybmFtZSI6IkJvYmJ5UzMwIiwiaWQiOjMzLCJpYXQiOjE3MjI0MjAzMjYsImV4cCI6MTcyMjQyMzkyNn0._8ZqHcoc4ACnXCkZARMrCgqjCH-35KNTVXvH8zpW0vI'
+                    }
+                });
+                const result = await response.json();
+                document.getElementById('status').innerText = 'Upload successful!';
+                console.log(result);
+            } catch (error) {
+                document.getElementById('status').innerText = 'Upload failed!';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</html>

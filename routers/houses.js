@@ -12,7 +12,7 @@ router.use(authProcedure)
 
 router.get('/', houseController.index)
 
-router.post('/', uploader.single("images"), validator(houseValidations), houseController.store)
+router.post('/', uploader.array("images"), validator(houseValidations), houseController.store)
 
 router.get('/:id', houseController.show)
 

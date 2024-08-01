@@ -7,10 +7,14 @@ const deletePhoto = require('../utils/deletePhoto.js');
 
 const index = async (req, res) => {
     try {
-        // const houses = await prisma.house.findMany();
-        // res.json(houses);
-
-        res.json('sei in index delle case');
+        const houses = await prisma.house.findMany(
+            { include: { images: true },
+            }
+        );
+        res.json({
+            data: houses,
+            images: houses.images
+        });
     } catch (err) {
         errorHandler(err, req, res);
     }
@@ -59,7 +63,7 @@ const store = async (req, res) => {
     } catch (err) {
         console.error('Error occurred:', err);
         if (req.files) {
-            deletePhoto(`house_images/${req.user.id}/house_${req.body.houseId}`, req.files.filename);
+            deletePhoto(`house_images/${req.user.id}/house_${req.body.title}`, req.files.filename);
         }
         errorHandler(err, req, res);
     }

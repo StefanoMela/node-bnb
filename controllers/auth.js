@@ -7,7 +7,8 @@ const restError = require("../utils/restError.js");
 
 const register = async (req, res) => {
     try {
-        // Destruttura i campi che mi arriveranno
+
+        // Destrutturo i campi che mi arriveranno
         const { name, lastName, dateOfBirth, username, email, password } = req.body;
 
         // Hash della password
@@ -25,7 +26,9 @@ const register = async (req, res) => {
 
         // Aggiungi il percorso dell'immagine se presente
         if (req.file) {
-            console.log('File received:', req.file);
+            if(!req.file.originalname.includes('png') && !req.file.originalname.includes('jpg') && !req.file.originalname.includes('jpeg')){
+                throw new Error('Invalid avatar file format. Allowed formats: jpeg, png, gif');
+            }
             data.avatar = req.file.filename;
         }
 

@@ -1,6 +1,7 @@
 const houseValidations = {
     title: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: "Title is mandatory",
             bail: true
@@ -12,6 +13,7 @@ const houseValidations = {
     },
     description: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: "Description is mandatory",
             bail: true
@@ -20,9 +22,10 @@ const houseValidations = {
             errorMessage: "Description must be a string",
             bail: true
         }
-    }, 
+    },
     pricePerDay: {
         in: ["body"],
+        trim: true,
         toInt: true,
         notEmpty: {
             errorMessage: "Price is mandatory",
@@ -35,6 +38,7 @@ const houseValidations = {
     },
     rooms: {
         in: ["body"],
+        trim: true,
         toInt: true,
         notEmpty: {
             errorMessage: "Rooms is mandatory",
@@ -48,6 +52,7 @@ const houseValidations = {
     },
     beds: {
         in: ["body"],
+        trim: true,
         toInt: true,
         notEmpty: {
             errorMessage: "Beds is mandatory",
@@ -61,6 +66,7 @@ const houseValidations = {
     },
     baths: {
         in: ["body"],
+        trim: true,
         toInt: true,
         notEmpty: {
             errorMessage: "Baths is mandatory",
@@ -73,10 +79,11 @@ const houseValidations = {
     },
     squareMeters: {
         in: ["body"],
+        trim: true,
         toInt: true,
         notEmpty: {
             errorMessage: "Square meters is mandatory",
-            bail: true  
+            bail: true
         },
         isInt: {
             errorMessage: "Square meters must be an integer",
@@ -85,6 +92,7 @@ const houseValidations = {
     },
     address: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: "Address is mandatory",
             bail: true
@@ -96,6 +104,7 @@ const houseValidations = {
     },
     user: {
         in: ["user"],
+        trim: true,
         toInt: true,
         notEmpty: {
             errorMessage: "User ID is mandatory",

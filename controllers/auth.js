@@ -27,7 +27,7 @@ const register = async (req, res) => {
         // Aggiungi il percorso dell'immagine se presente
         if (req.file) {
             if(!req.file.originalname.includes('png') && !req.file.originalname.includes('jpg') && !req.file.originalname.includes('jpeg')){
-                throw new Error('Invalid avatar file format. Allowed formats: jpeg, png, gif');
+                throw new restError('Invalid avatar file format. Allowed formats: jpeg, png, gif', 400);
             }
             data.avatar = req.file.filename;
         }

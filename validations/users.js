@@ -4,6 +4,11 @@ const prisma = new PrismaClient();
 const registerData = {
     name: {
         in: ["body"],
+        trim: true,
+        notEmpty: {
+            errorMessage: 'Name is required.',
+            bail: true
+        },
         isString: {
             errorMessage: 'Name gotta be a string.',
             bail: true
@@ -12,10 +17,11 @@ const registerData = {
             errorMessage: 'Name must be at least 3 chars',
             statusCode: 422,
             options: { min: 3 }
-        }
+        },
     },
     lastName: {
         in: ["body"],
+        trim: true,
         isString: {
             errorMessage: 'Last name gotta be a string.',
             bail: true
@@ -23,7 +29,12 @@ const registerData = {
     },
     dateOfBirth: {
         in: ["body"],
+        trim: true,
         toDate: true,
+        notEmpty: {
+            errorMessage: 'Date of birth is required.',
+            bail: true
+        },
         isISO8601: {
             errorMessage: 'Date of birth must be a valid date',
             bail: true
@@ -31,6 +42,7 @@ const registerData = {
     },
     username: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: 'Username is required.',
             bail: true
@@ -57,6 +69,7 @@ const registerData = {
     },
     email: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: "Email è mandatory",
             bail: true,
@@ -80,6 +93,7 @@ const registerData = {
     },
     password: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: 'Password è un campo obbligatorio.',
             bail: true
@@ -93,28 +107,12 @@ const registerData = {
             options: { min: 8 }
         }
     },
-    avatar: {
-        in: ["file"],
-        optional: true,
-        custom: {
-            options: (value, req ) => {
-                const allowedMimetypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                if (req.file) {
-                    const file = req.file;
-                    if (!allowedMimetypes.includes(file.mimetype)) {
-                        throw new Error('Invalid avatar file format. Allowed formats: jpeg, png, gif');
-                    }
-                    return true;
-                }
-                return true;
-            },
-        },
-    },
 }
 
 const loginData = {
     email: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: 'Email is required.',
             bail: true
@@ -136,6 +134,7 @@ const loginData = {
     },
     password: {
         in: ["body"],
+        trim: true,
         notEmpty: {
             errorMessage: 'Password is required.',
             bail: true

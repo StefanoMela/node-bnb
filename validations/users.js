@@ -15,7 +15,6 @@ const registerData = {
         },
         isLength: {
             errorMessage: 'Name must be at least 3 chars',
-            statusCode: 422,
             options: { min: 3 }
         },
     },

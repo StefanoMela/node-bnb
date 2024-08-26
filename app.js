@@ -14,6 +14,10 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
 
+app.get("/", (req, res) => {
+    res.send("Ciao");
+});
+
 app.use('/auth', authRouter)
 
 app.use('/houses', houseRouter)

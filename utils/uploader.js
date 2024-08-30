@@ -7,15 +7,15 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         let uploadPath;
         if (req.originalUrl.includes('register')) {
-            userDir = path.join(__dirname, `../public/avatars/${req.body.username}/`);
+            const userDir = path.join(__dirname, `../public/avatars/${req.body.username}/`);
             if (!fs.existsSync(userDir)) {
                 fs.mkdirSync(userDir, { recursive: true });
             }
             uploadPath = userDir;
         } else {
-//            Crea la directory per l'utente e la casa se non esiste
+            //            Crea la directory per l'utente e la casa se non esiste
             const userDir = path.join(__dirname, `../public/house_images/${req.user.id}`);
-            const houseDir = path.join(userDir, `house_${req.body.title}`).replace(/\s+/g, "_");
+            const houseDir = path.join(userDir, `${req.body.title}`).replace(/\s+/g, "_");
             if (!fs.existsSync(houseDir)) {
                 fs.mkdirSync(houseDir, { recursive: true });
             }

@@ -33,7 +33,7 @@
         <input type="text" id="address" name="address" required><br><br>
 
         <label for="images">Images:</label>
-        <input type="file" id="images" name="images" multiple><br><br>
+        <input type="file" id="images" name="images" multiple="multiple"><br><br>
 
         <button type="submit">Upload</button>
     </form>
@@ -53,7 +53,7 @@
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb3ZhM0BlbWFpbC5jb20iLCJ1c2VybmFtZSI6IkJvYmJ5UzMwIiwiaWQiOjMzLCJpYXQiOjE3MjI0MjAzMjYsImV4cCI6MTcyMjQyMzkyNn0._8ZqHcoc4ACnXCkZARMrCgqjCH-35KNTVXvH8zpW0vI'
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkVsb3Vpc2UuQ29ybWllcjUwQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiWmFuZV9HdWxnb3dza2kiLCJpZCI6NTMsImlhdCI6MTcyNTAxNzYyNiwiZXhwIjoxNzI1MDIxMjI2fQ.f9ljLkcvsv0CHQ0Aj0NmpHLjHXGWGFD1TnaPgBmlmj4'
                     }
                 });
                 const result = await response.json();
